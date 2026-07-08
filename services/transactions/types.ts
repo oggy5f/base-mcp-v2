@@ -12,4 +12,6 @@ export interface TransactionResult {
   value?: bigint;
 
   hash?: `0x${string}`;
+
+  explorer?: string;
 }

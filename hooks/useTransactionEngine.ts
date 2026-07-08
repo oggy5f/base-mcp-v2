@@ -26,10 +26,11 @@ export default function useTransactionEngine() {
       );
 
       return {
-        success: true,
-        message: "Transaction sent successfully.",
-        hash,
-      };
+  success: true,
+  message: "Transaction sent successfully.",
+  hash,
+  explorer: `https://basescan.org/tx/${hash}`,
+};
     } catch (error) {
       return {
         success: false,

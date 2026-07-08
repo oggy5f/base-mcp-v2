@@ -9,6 +9,10 @@ type Message = {
   id: number;
   role: "user" | "assistant";
   content: string;
+
+  hash?: string;
+
+  explorer?: string;
 };
 
 export default function Chat() {
@@ -71,6 +75,31 @@ const result = await executeAction(
   chainId
 );
 
+if (
+  result.success &&
+  reply.action === "SEND_ETH" &&
+  reply.recipient &&
+  reply.amount
+) {
+  const tx = await send(
+    reply.recipient as `0x${string}`,
+    reply.amount
+  );
+
+ setMessages((prev) => [
+  ...prev,
+  {
+    id: Date.now() + 1,
+    role: "assistant",
+    content: tx.message,
+hash: tx.hash,
+explorer: tx.explorer,
+  },
+]);
+
+  return;
+}
+
 setMessages((prev) => [
   ...prev,
   {
@@ -122,7 +151,28 @@ setMessages((prev) => [
                       : "bg-zinc-700"
                   }`}
                 >
-                  {message.content}
+                  <>
+  <div>{message.content}</div>
+
+  {message.hash && (
+    <div className="mt-2 break-all text-xs text-zinc-400">
+      Hash:
+      <br />
+      {message.hash}
+    </div>
+  )}
+
+  {message.explorer && (
+    <a
+      href={message.explorer}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-2 block text-blue-400 underline hover:text-blue-300"
+    >
+      🔗 View on BaseScan
+    </a>
+  )}
+</>
                 </div>
               </div>
             ))}

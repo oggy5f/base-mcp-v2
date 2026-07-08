@@ -7,6 +7,12 @@ export type ChatResponse = {
   type: "chat" | "action";
   message: string;
   action?: string;
+
+  amount?: string;
+
+  recipient?: `0x${string}`;
+
+  token?: string;
 };
 
 export async function sendChatMessage(
