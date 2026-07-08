@@ -15,16 +15,27 @@ export default function useWalletTransaction() {
     recipient: `0x${string}`,
     value: bigint
   ) {
-    const hash = await sendTransactionAsync({
+    return await sendTransactionAsync({
       to: recipient,
       value,
     });
+  }
 
-    return hash;
+  async function sendContractTransaction(
+    contract: `0x${string}`,
+    data: `0x${string}`,
+    value: bigint = BigInt(0)
+  ) {
+    return await sendTransactionAsync({
+      to: contract,
+      data,
+      value,
+    });
   }
 
   return {
     sendEth,
+    sendContractTransaction,
     hash: data,
     error,
     isPending,

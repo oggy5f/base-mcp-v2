@@ -1,21 +1,29 @@
-import { parseEther } from "viem";
+import {
+  encodeFunctionData,
+  erc20Abi,
+  parseUnits,
+} from "viem";
 import { resolveBasename } from "./resolveBasename";
 
-export interface SendEthResult {
-  type: "SEND_ETH";
+export const USDC_ADDRESS =
+  "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as const;
+
+export interface SendUsdcResult {
+  type: "SEND_USDC";
   success: boolean;
   message: string;
+  to?: `0x${string}`;
+  data?: `0x${string}`;
   value?: bigint;
-  recipient?: `0x${string}`;
 }
 
-export async function sendEth(
+export async function sendUsdc(
   amount?: string,
   recipient?: string
-): Promise<SendEthResult> {
+): Promise<SendUsdcResult> {
   if (!amount) {
     return {
-      type: "SEND_ETH",
+      type: "SEND_USDC",
       success: false,
       message: "Amount is required.",
     };
@@ -23,7 +31,7 @@ export async function sendEth(
 
   if (!recipient) {
     return {
-      type: "SEND_ETH",
+      type: "SEND_USDC",
       success: false,
       message: "Recipient address is required.",
     };
@@ -39,7 +47,7 @@ export async function sendEth(
 
     if (!resolved.success || !resolved.address) {
       return {
-        type: "SEND_ETH",
+        type: "SEND_USDC",
         success: false,
         message: resolved.message,
       };
@@ -49,20 +57,28 @@ export async function sendEth(
   }
 
   try {
-    const value = parseEther(amount);
+    const data = encodeFunctionData({
+      abi: erc20Abi,
+      functionName: "transfer",
+      args: [
+        resolvedRecipient as `0x${string}`,
+        parseUnits(amount, 6),
+      ],
+    });
 
     return {
-      type: "SEND_ETH",
+      type: "SEND_USDC",
       success: true,
-      message: `Sending ${amount} ETH to ${recipient}`,
-      value,
-      recipient: resolvedRecipient as `0x${string}`,
+      message: `Sending ${amount} USDC to ${recipient}`,
+      to: USDC_ADDRESS,
+      data,
+      value: BigInt(0),
     };
   } catch {
     return {
-      type: "SEND_ETH",
+      type: "SEND_USDC",
       success: false,
-      message: "Invalid ETH amount.",
+      message: "Invalid USDC amount.",
     };
   }
 }

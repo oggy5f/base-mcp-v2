@@ -78,24 +78,41 @@ const result = await executeAction(
 if (
   result.success &&
   reply.action === "SEND_ETH" &&
-  reply.recipient &&
-  reply.amount
+  reply.amount &&
+  reply.recipient
 ) {
-  const tx = await send(
-    reply.recipient as `0x${string}`,
-    reply.amount
-  );
+  const tx = await send({
+    recipient: reply.recipient as `0x${string}`,
+    amount: reply.amount,
+  });
 
- setMessages((prev) => [
-  ...prev,
-  {
-    id: Date.now() + 1,
-    role: "assistant",
-    content: tx.message,
-hash: tx.hash,
-explorer: tx.explorer,
-  },
-]);
+  setMessages((prev) => [
+    ...prev,
+    {
+      id: Date.now() + 1,
+      role: "assistant",
+      content: tx.message,
+      hash: tx.hash,
+      explorer: tx.explorer,
+    },
+  ]);
+
+  return;
+}
+
+if (result.success && reply.action === "SEND_USDC") {
+  const tx = await send(result as any);
+
+  setMessages((prev) => [
+    ...prev,
+    {
+      id: Date.now() + 1,
+      role: "assistant",
+      content: tx.message,
+      hash: tx.hash,
+      explorer: tx.explorer,
+    },
+  ]);
 
   return;
 }

@@ -15,7 +15,7 @@ export interface ParsedAction {
 
   amount?: string;
 
-  recipient?: `0x${string}`;
+  recipient?: string;
 
   token?: string;
 

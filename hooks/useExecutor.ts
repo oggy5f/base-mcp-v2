@@ -4,6 +4,7 @@ import { ParsedAction } from "@/services/parser/types";
 import { checkBalance } from "@/services/actions/checkBalance";
 import { getNetwork } from "@/services/actions/getNetwork";
 import { sendEth } from "@/services/actions/sendEth";
+import { sendUsdc } from "@/services/actions/sendUsdc";
 
 export async function executeAction(
   action: ParsedAction,
@@ -19,6 +20,12 @@ export async function executeAction(
 
     case "SEND_ETH":
       return await sendEth(
+        action.amount,
+        action.recipient
+      );
+
+    case "SEND_USDC":
+      return await sendUsdc(
         action.amount,
         action.recipient
       );

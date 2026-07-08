@@ -33,14 +33,14 @@ export function parseAction(message: string): ParsedAction {
     const amountMatch = message.match(/(\d+(\.\d+)?)/);
 
     const addressMatch = message.match(
-      /(0x[a-fA-F0-9]{40})/
-    );
+  /(0x[a-fA-F0-9]{40}|[a-zA-Z0-9-]+\.base(?:\.eth)?)/i
+);
 
     return {
       action: "SEND_ETH",
       message,
       amount: amountMatch?.[1],
-      recipient: addressMatch?.[1] as `0x${string}` | undefined,
+      recipient: addressMatch?.[1],
       token: "ETH",
     };
   }
@@ -53,7 +53,7 @@ export function parseAction(message: string): ParsedAction {
     const amountMatch = message.match(/(\d+(\.\d+)?)/);
 
     const addressMatch = message.match(
-      /(0x[a-fA-F0-9]{40})/
+     /(0x[a-fA-F0-9]{40}|[a-zA-Z0-9-]+\.base(?:\.eth)?)/i
     );
 
     return {
