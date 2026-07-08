@@ -3,16 +3,30 @@ import { ParsedAction } from "./types";
 export function parseAction(message: string): ParsedAction {
   const input = message.toLowerCase().trim();
 
-  // Check Balance
-  if (
-    input.includes("balance") ||
-    input.includes("wallet balance")
-  ) {
-    return {
-      action: "CHECK_BALANCE",
-      message,
-    };
-  }
+  // USDC Balance
+if (
+  (input.includes("balance") && input.includes("usdc")) ||
+  input.includes("usdc balance") ||
+  input.includes("balance of usdc") ||
+  input.includes("show my usdc balance")
+) {
+  return {
+    action: "READ_CONTRACT",
+    message,
+    token: "USDC",
+  };
+}
+
+// Wallet Balance (ETH)
+if (
+  input.includes("balance") ||
+  input.includes("wallet balance")
+) {
+  return {
+    action: "CHECK_BALANCE",
+    message,
+  };
+}
 
   // Get Network
   if (
