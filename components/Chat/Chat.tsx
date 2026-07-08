@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAccount, useChainId } from "wagmi";
 import { sendChatMessage } from "@/services/chat/chat";
 import { executeAction } from "@/hooks/useExecutor";
+import useTransactionEngine from "@/hooks/useTransactionEngine";
 type Message = {
   id: number;
   role: "user" | "assistant";
@@ -13,7 +14,7 @@ type Message = {
 export default function Chat() {
     const { address } = useAccount();
     const chainId = useChainId();
-   
+   const { send } = useTransactionEngine();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
