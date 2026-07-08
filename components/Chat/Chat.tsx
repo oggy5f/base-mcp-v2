@@ -13,6 +13,7 @@ type Message = {
 export default function Chat() {
     const { address } = useAccount();
     const chainId = useChainId();
+   
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);

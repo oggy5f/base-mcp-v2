@@ -3,6 +3,7 @@
 import { ParsedAction } from "@/services/parser/types";
 import { checkBalance } from "@/services/actions/checkBalance";
 import { getNetwork } from "@/services/actions/getNetwork";
+import { sendEth } from "@/services/actions/sendEth";
 
 export async function executeAction(
   action: ParsedAction,
@@ -17,12 +18,10 @@ export async function executeAction(
       return await getNetwork(chainId);
 
     case "SEND_ETH":
-      return {
-        success: true,
-        message: "Preparing transaction...",
-        recipient: action.recipient,
-        amount: action.amount,
-      };
+      return await sendEth(
+        action.amount,
+        action.recipient
+      );
 
     default:
       return {

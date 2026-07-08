@@ -20,10 +20,10 @@ export default function useTransactionEngine() {
     }
 
     try {
-      const hash = await wallet.sendTransactionAsync({
-        to: tx.recipient,
-        value: tx.value,
-      });
+      const hash = await wallet.sendEth(
+        tx.recipient,
+        tx.value
+      );
 
       return {
         success: true,
